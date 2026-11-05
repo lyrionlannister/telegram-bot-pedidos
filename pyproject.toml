@@ -1,0 +1,17 @@
+[project]
+name = "telegram-bot-pedidos"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "lyrionlannister", email = "" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv>=1.0",
+    "python-telegram-bot>=21,<23",
+    "sqlalchemy>=2.0",
+]
+
+[tool.uv]
+package = false
