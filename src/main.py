@@ -28,10 +28,10 @@ from telegram.ext import (
 )
 from telegram.request import HTTPXRequest, RequestData
 
-from pedidos.config import config, log
-from pedidos.equipo import es_repartidor
-from pedidos.handlers import admin, cliente, errors, repartidor
-from pedidos.repository import init_db
+from bot.config import config, log
+from bot.equipo import es_repartidor
+from bot.handlers import admin, cliente, errors, repartidor
+from bot.repository import init_db
 
 
 class FiltroRepartidor(filters.MessageFilter):
