@@ -81,7 +81,10 @@ def main() -> None:
     app.add_error_handler(errors.on_error)
 
     log.info("Bot corriendo…")
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+    try:
+        app.run_polling(allowed_updates=Update.ALL_TYPES)
+    except KeyboardInterrupt:
+        log.info("Bot detenido (Ctrl+C).")
 
 
 if __name__ == "__main__":
