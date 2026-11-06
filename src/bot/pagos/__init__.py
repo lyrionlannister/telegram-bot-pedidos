@@ -1,7 +1,7 @@
 """Datos de pago (JSON editable por el admin con /pago)."""
 import json
 
-from .config import config
+from ..config import config
 
 _DEFAULT = {
     "banco": "X",

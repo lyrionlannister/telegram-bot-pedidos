@@ -31,7 +31,7 @@ from telegram.request import HTTPXRequest, RequestData
 from bot.config import config, log
 from bot.equipo import es_repartidor
 from bot.handlers import admin, cliente, errors, repartidor
-from bot.repository import init_db
+from bot.pedidos.repository import init_db
 
 
 class FiltroRepartidor(filters.MessageFilter):

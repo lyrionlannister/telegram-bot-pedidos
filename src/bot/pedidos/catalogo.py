@@ -1,7 +1,7 @@
 """Catálogo de productos (datos estáticos en JSON)."""
 import json
 
-from .config import config
+from ..config import config
 
 CATALOGO: list[dict] = json.loads(config.rutas.catalogo_path.read_text(encoding="utf-8"))
 PRODUCTOS: dict[str, dict] = {p["id"]: p for p in CATALOGO}
