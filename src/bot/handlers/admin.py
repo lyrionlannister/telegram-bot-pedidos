@@ -7,13 +7,13 @@ from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
 from ..apertura import set_abierto, tomar_pendientes
-from ..catalogo import CATALOGO, guardar_catalogo
 from ..config import HTML, log
-from ..constants import EN_REPARTO, ESPERA_PAGO, PIDE_UBICACION, PREPARANDO, REVISION_PAGO
 from ..equipo import EQUIPO, admin_chat_id, guardar_equipo, siguiente_repartidor
 from ..pagos import DATOS_PAGO, guardar_datos_pago
-from ..repository import actualizar, obtener
-from ..services import link_mapa, resumen, teclado_ubicacion
+from ..pedidos.catalogo import CATALOGO, guardar_catalogo
+from ..pedidos.constants import EN_REPARTO, ESPERA_PAGO, PIDE_UBICACION, PREPARANDO, REVISION_PAGO
+from ..pedidos.repository import actualizar, obtener
+from ..pedidos.services import link_mapa, resumen, teclado_ubicacion
 
 
 def teclado_apertura(abierto: bool) -> InlineKeyboardMarkup:

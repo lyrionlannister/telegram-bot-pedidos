@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 
-from .config import config
+from ..config import config
 from .constants import CARRITO, CERRADOS, CONFIRMANDO_ENTREGA
 from .models import Base, Pedido
 

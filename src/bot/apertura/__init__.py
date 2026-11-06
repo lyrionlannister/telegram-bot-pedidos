@@ -1,7 +1,7 @@
 """Abierto/cerrado del negocio (editable por el admin con /activar y /desactivar)."""
 import json
 
-from .config import config
+from ..config import config
 
 MENSAJE_FUERA_DE_LINEA = (
     "🔴 Por ahora no estamos recibiendo pedidos. Vuelve a intentarlo más tarde."

@@ -11,9 +11,11 @@ from telegram.error import BadRequest
 from telegram.ext import ContextTypes
 
 from ..apertura import MENSAJE_FUERA_DE_LINEA, esta_abierto, registrar_pendiente
-from ..catalogo import PRODUCTOS
 from ..config import HTML, config
-from ..constants import (
+from ..equipo import admin_chat_id
+from ..pagos import texto_datos_pago
+from ..pedidos.catalogo import PRODUCTOS
+from ..pedidos.constants import (
     CANCELABLES,
     CANCELADO,
     CARRITO,
@@ -23,10 +25,8 @@ from ..constants import (
     PREPARANDO,
     REVISION_PAGO,
 )
-from ..equipo import admin_chat_id
-from ..pagos import texto_datos_pago
-from ..repository import actualizar, crear_pedido, pedido_activo
-from ..services import (
+from ..pedidos.repository import actualizar, crear_pedido, pedido_activo
+from ..pedidos.services import (
     link_mapa,
     resumen,
     teclado_catalogo,

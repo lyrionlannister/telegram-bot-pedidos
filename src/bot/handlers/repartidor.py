@@ -12,9 +12,9 @@ from telegram import (
 from telegram.ext import ContextTypes
 
 from ..config import HTML
-from ..constants import CONFIRMANDO_ENTREGA, EN_REPARTO, ENTREGADO
 from ..equipo import admin_chat_id, es_repartidor, set_disponibilidad
-from ..repository import actualizar, obtener, pedido_en_confirmacion
+from ..pedidos.constants import CONFIRMANDO_ENTREGA, EN_REPARTO, ENTREGADO
+from ..pedidos.repository import actualizar, obtener, pedido_en_confirmacion
 
 
 def teclado_disponibilidad(activo: bool) -> InlineKeyboardMarkup:

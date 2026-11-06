@@ -5,7 +5,7 @@ disponible y se manda al final, para repartir el trabajo por turnos.
 """
 import json
 
-from .config import config
+from ..config import config
 
 
 def _cargar() -> dict:
