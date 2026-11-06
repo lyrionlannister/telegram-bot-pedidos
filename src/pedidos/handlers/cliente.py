@@ -10,7 +10,7 @@ from telegram import (
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes
 
-from ..apertura import MENSAJE_FUERA_DE_LINEA, esta_abierto
+from ..apertura import MENSAJE_FUERA_DE_LINEA, esta_abierto, registrar_pendiente
 from ..catalogo import PRODUCTOS
 from ..config import HTML, config
 from ..constants import (
@@ -37,6 +37,8 @@ from ..services import (
 
 async def cmd_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     if not esta_abierto() and not pedido_activo(update.effective_user.id):
+        if update.effective_chat.id != admin_chat_id():
+            registrar_pendiente(update.effective_chat.id)
         await update.effective_message.reply_text(MENSAJE_FUERA_DE_LINEA)
         return
     kb = InlineKeyboardMarkup([[InlineKeyboardButton("🛒 Hacer pedido", callback_data="nuevo")]])
@@ -73,6 +75,8 @@ async def cb_cliente(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
             await q.answer(f"Ya tienes un pedido en curso (#{p.id}).", show_alert=True)
             return
         if not p and not esta_abierto():
+            if q.message.chat.id != admin_chat_id():
+                registrar_pendiente(q.message.chat.id)
             await q.answer(MENSAJE_FUERA_DE_LINEA, show_alert=True)
             return
         if not p:

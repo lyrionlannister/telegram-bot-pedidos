@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.error import TelegramError
 from telegram.ext import ContextTypes
 
-from ..apertura import set_abierto
+from ..apertura import set_abierto, tomar_pendientes
 from ..catalogo import CATALOGO, guardar_catalogo
 from ..config import HTML, log
 from ..constants import EN_REPARTO, ESPERA_PAGO, PIDE_UBICACION, PREPARANDO, REVISION_PAGO
@@ -22,13 +22,31 @@ def teclado_apertura(abierto: bool) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([[InlineKeyboardButton("🟢 Activar", callback_data="bot_on")]])
 
 
+async def _avisar_pendientes(ctx: ContextTypes.DEFAULT_TYPE) -> int:
+    """Reintenta contactar a quienes escribieron mientras el bot estaba desactivado."""
+    chat_ids = tomar_pendientes()
+    kb = InlineKeyboardMarkup([[InlineKeyboardButton("🛒 Hacer pedido", callback_data="nuevo")]])
+    avisados = 0
+    for chat_id in chat_ids:
+        try:
+            await ctx.bot.send_message(
+                chat_id, "🟢 ¡Ya estamos recibiendo pedidos!", reply_markup=kb
+            )
+            avisados += 1
+        except TelegramError as e:
+            log.error("No se pudo avisar al chat %s: %s", chat_id, e)
+    return avisados
+
+
 async def cmd_abrir(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_chat.id != admin_chat_id():
         return
     set_abierto(True)
-    await update.message.reply_text(
-        "🟢 Bot activado. Ya se pueden hacer pedidos.", reply_markup=teclado_apertura(True)
-    )
+    avisados = await _avisar_pendientes(ctx)
+    texto = "🟢 Bot activado. Ya se pueden hacer pedidos."
+    if avisados:
+        texto += f"\nSe avisó a {avisados} cliente(s) que habían escrito mientras estabas desconectado."
+    await update.message.reply_text(texto, reply_markup=teclado_apertura(True))
 
 
 async def cmd_cerrar(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
@@ -48,10 +66,12 @@ async def cb_apertura(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:
     abierto = q.data == "bot_on"
     set_abierto(abierto)
     await q.answer("Bot activado ✅" if abierto else "Bot desactivado 🔴")
-    await q.edit_message_text(
-        "🟢 Bot activado. Ya se pueden hacer pedidos." if abierto else "🔴 Bot desactivado. No se podrán hacer pedidos nuevos.",
-        reply_markup=teclado_apertura(abierto),
-    )
+    texto = "🟢 Bot activado. Ya se pueden hacer pedidos." if abierto else "🔴 Bot desactivado. No se podrán hacer pedidos nuevos."
+    if abierto:
+        avisados = await _avisar_pendientes(ctx)
+        if avisados:
+            texto += f"\nSe avisó a {avisados} cliente(s) que habían escrito mientras estabas desconectado."
+    await q.edit_message_text(texto, reply_markup=teclado_apertura(abierto))
 
 
 async def cmd_catalogo(update: Update, ctx: ContextTypes.DEFAULT_TYPE) -> None:

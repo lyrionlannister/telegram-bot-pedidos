@@ -29,6 +29,7 @@ class RutasConfig:
     datos_pago_path: Path
     equipo_path: Path
     apertura_path: Path
+    pendientes_path: Path
 
 
 @dataclass(frozen=True)
@@ -54,6 +55,7 @@ def cargar_config() -> Config:
             datos_pago_path=base / "datos_pago.json",
             equipo_path=base / "equipo.json",
             apertura_path=base / "apertura.json",
+            pendientes_path=base / "pendientes.json",
         ),
     )
 
